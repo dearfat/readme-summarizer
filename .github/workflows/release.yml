@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build for ${{ matrix.os }}
@@ -29,11 +32,9 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          target: ${{ matrix.target }}
-          override: true
+          targets: ${{ matrix.target }}
       
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
@@ -60,43 +61,13 @@ jobs:
         with:
           path: artifacts
       
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          files: |
+            artifacts/readme-sum-linux/readme-sum
+            artifacts/readme-sum-macos/readme-sum
+            artifacts/readme-sum-windows.exe/readme-sum.exe
           draft: false
           prerelease: false
-      
-      - name: Upload Linux Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/readme-sum-linux/readme-sum
-          asset_name: readme-sum-linux
-          asset_content_type: application/octet-stream
-      
-      - name: Upload macOS Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/readme-sum-macos/readme-sum
-          asset_name: readme-sum-macos
-          asset_content_type: application/octet-stream
-      
-      - name: Upload Windows Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/readme-sum-windows.exe/readme-sum.exe
-          asset_name: readme-sum-windows.exe
-          asset_content_type: application/octet-stream
+          generate_release_notes: true
