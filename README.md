@@ -1,204 +1,206 @@
 # README Summarizer
 
-一个用 Rust 编写的命令行工具，用于自动扫描目录下的项目并生成 README 文件摘要。
+[中文文档](README.zh-CN.md)
 
-## 功能特性
+A CLI tool written in Rust to automatically scan directories and generate summaries of README files in a single Markdown table.
 
-- 🔍 自动扫描指定目录下的所有子项目
-- 📝 提取 README 文件中的关键信息（项目名称、功能、解决的问题）
-- 💾 支持配置持久化，保存默认设置
-- 📊 生成单个 Markdown 表格文件汇总所有项目
-- 📁 表格包含可点击的项目目录链接
-- 🎯 默认输出到源目录，便于查看
-- 💬 首次运行交互式配置
-- 👀 监控模式：自动检测文件变化并重新生成
-- 📚 Obsidian 集成：一键同步到 Obsidian vault
-- ⚡ 快速高效的本地解析，无需 API 调用
+## Features
 
-## 安装
+- 🔍 Automatically scan all sub-projects in a specified directory
+- 📝 Extract key information from README files (project name, features, problems solved)
+- 💾 Persistent configuration with default settings
+- 📊 Generate a single Markdown table file summarizing all projects
+- 📁 Table includes clickable project directory links
+- 🎯 Default output to source directory for easy access
+- 💬 Interactive configuration on first run
+- 👀 Watch mode: automatically detect file changes and regenerate
+- 📚 Obsidian integration: one-click sync to Obsidian vault
+- ⚡ Fast and efficient local parsing, no API calls required
 
-### 方法 1: 从 GitHub Releases 下载（推荐）
+## Installation
 
-访问 [Releases 页面](https://github.com/YOUR_USERNAME/readme-summarizer/releases) 下载适合你操作系统的预编译二进制文件：
+### Method 1: Download from GitHub Releases (Recommended)
+
+Visit the [Releases page](https://github.com/dearfat/readme-summarizer/releases) to download pre-compiled binaries for your operating system:
 
 **macOS**
 ```bash
-# 下载并安装
-curl -L https://github.com/YOUR_USERNAME/readme-summarizer/releases/latest/download/readme-sum-macos -o readme-sum
+# Download and install
+curl -L https://github.com/dearfat/readme-summarizer/releases/latest/download/readme-sum-macos -o readme-sum
 chmod +x readme-sum
 sudo mv readme-sum /usr/local/bin/
 ```
 
 **Linux**
 ```bash
-# 下载并安装
-curl -L https://github.com/YOUR_USERNAME/readme-summarizer/releases/latest/download/readme-sum-linux -o readme-sum
+# Download and install
+curl -L https://github.com/dearfat/readme-summarizer/releases/latest/download/readme-sum-linux -o readme-sum
 chmod +x readme-sum
 sudo mv readme-sum /usr/local/bin/
 ```
 
 **Windows**
 
-下载 `readme-sum-windows.exe`，将其重命名为 `readme-sum.exe` 并添加到 PATH 环境变量中。
+Download `readme-sum-windows.exe`, rename it to `readme-sum.exe` and add it to your PATH environment variable.
 
-### 方法 2: 使用 Homebrew（macOS/Linux）
+### Method 2: Using Homebrew (macOS/Linux)
 
 ```bash
-# 添加 tap
-brew tap YOUR_USERNAME/tap
+# Add tap
+brew tap dearfat/tap
 
-# 安装
+# Install
 brew install readme-summarizer
 ```
 
-### 方法 3: 使用 Cargo 安装
+### Method 3: Using Cargo
 
-如果你已经安装了 Rust 工具链：
+If you have the Rust toolchain installed:
 
 ```bash
-# 从 GitHub 安装
-cargo install --git https://github.com/YOUR_USERNAME/readme-summarizer
+# Install from GitHub
+cargo install --git https://github.com/dearfat/readme-summarizer
 
-# 从 crates.io 安装（发布后）
+# Install from crates.io (after published)
 cargo install readme-summarizer
 ```
 
-### 方法 4: 从源码构建
+### Method 4: Build from Source
 
 ```bash
-# 克隆仓库
-git clone https://github.com/YOUR_USERNAME/readme-summarizer
+# Clone the repository
+git clone https://github.com/dearfat/readme-summarizer
 cd readme-summarizer
 
-# 构建发布版本
+# Build release version
 cargo build --release
 
-# 二进制文件位于 target/release/readme-sum
-# 可以将其复制到 PATH 中的目录
+# Binary file is located at target/release/readme-sum
+# Copy it to a directory in your PATH
 sudo cp target/release/readme-sum /usr/local/bin/
 ```
 
-### 验证安装
+### Verify Installation
 
 ```bash
 readme-sum --version
 ```
 
-## 使用方法
+## Usage
 
-### 首次使用
+### First Run
 
-首次运行时，工具会提示你输入要扫描的源目录：
+On first run, the tool will prompt you to enter the source directory to scan:
 
 ```bash
 readme-sum
 
-# 输出：
-# 📁 欢迎使用 README Summarizer!
-# 
-# 请输入要扫描的源目录路径: ~/projects
-# ✓ 配置已保存
+# You will be prompted:
+# 📁 Welcome to README Summarizer!
+# Please enter the source directory path: ~/projects
 ```
 
-### 基本用法
+The configuration will be saved automatically for future use.
+
+### Basic Usage
 
 ```bash
-# 使用配置的默认目录扫描
+# Use configured default directory
 readme-sum
 
-# 指定源目录
+# Specify source directory
 readme-sum --source ~/projects
 
-# 指定输出文件路径
+# Specify output file path
 readme-sum --source ~/projects --output ~/Documents/summary.md
 
-# 指定自定义 README 文件名
+# Specify custom README filename
 readme-sum --filename README.zh-CN.md
 ```
 
-### 监控模式
+### Watch Mode
 
-自动监控源目录变化，当检测到 README 文件变化或新项目时自动重新生成摘要：
+Automatically monitor source directory changes and regenerate summary when README files change or new projects are added:
 
 ```bash
-# 使用配置的默认目录
+# Use configured default directory
 readme-sum watch
 
-# 指定源目录
+# Specify source directory
 readme-sum watch --source ~/projects
 ```
 
-### Obsidian 同步
+### Obsidian Sync
 
-将生成的摘要文件同步到 Obsidian vault：
+Sync the generated summary file to your Obsidian vault:
 
 ```bash
-# 首次使用会提示输入 vault 路径
+# First time will prompt for vault path
 readme-sum sync-obsidian
 
-# 指定 vault 路径
+# Specify vault path
 readme-sum sync-obsidian --vault ~/Documents/ObsidianVault
 ```
 
-### 配置管理
+### Configuration Management
 
-使用 `config` 子命令管理配置文件：
+Use the `config` subcommand to manage configuration files:
 
 ```bash
-# 查看当前配置
+# View current configuration
 readme-sum config view
 
-# 设置源目录
+# Set source directory
 readme-sum config set source ~/projects
 
-# 设置 README 文件名
+# Set README filename
 readme-sum config set readme-filename README.zh-CN.md
 
-# 设置输出文件名
+# Set output filename
 readme-sum config set output-filename SUMMARY.md
 
-# 设置 Obsidian vault 路径
+# Set Obsidian vault path
 readme-sum config set obsidian-vault ~/Documents/ObsidianVault
 
-# 在默认编辑器中打开配置文件
+# Open configuration file in default editor
 readme-sum config edit
 
-# 显示配置文件路径
+# Show configuration file path
 readme-sum config path
 ```
 
-### 命令行参数
+### Command Line Arguments
 
 ```
-命令:
-  watch          监控源目录变化并自动重新生成摘要
-  sync-obsidian  同步摘要文件到 Obsidian vault
-  config         管理配置文件
-  help           显示帮助信息
+Commands:
+  watch          Monitor source directory changes and auto-regenerate summary
+  sync-obsidian  Sync summary file to Obsidian vault
+  config         Manage configuration file
+  help           Show help information
 
-选项:
-  -s, --source <PATH>      扫描的源目录（覆盖配置文件）
-  -o, --output <FILE>      输出文件路径（默认: {源目录}/README-SUMMARY.md）
-  -f, --filename <NAME>    README 文件名（默认: README.md）
-  -h, --help              显示帮助信息
-  -V, --version           显示版本信息
+Options:
+  -s, --source <PATH>      Source directory to scan (overrides config file)
+  -o, --output <FILE>      Output file path (default: {source_dir}/README-SUMMARY.md)
+  -f, --filename <NAME>    README filename (default: README.md)
+  -h, --help              Show help information
+  -V, --version           Show version information
 
-config 子命令:
-  view  查看当前配置
-  set   设置配置项 (source|readme-filename|output-filename|obsidian-vault)
-  edit  在默认编辑器中打开配置文件
-  path  显示配置文件路径
+config subcommands:
+  view  View current configuration
+  set   Set configuration item (source|readme-filename|output-filename|obsidian-vault)
+  edit  Open configuration file in default editor
+  path  Show configuration file path
 ```
 
-### 配置文件
+### Configuration File
 
-配置文件位置根据操作系统自动确定：
+Configuration file location is automatically determined based on your operating system:
 
 - **Linux**: `~/.config/readme-summarizer/config.toml`
 - **macOS**: `~/Library/Application Support/readme-summarizer/config.toml`
 - **Windows**: `%APPDATA%\readme-summarizer\config.toml`
 
-配置文件格式：
+Configuration file format:
 
 ```toml
 source_directory = "/Users/username/projects"
@@ -207,89 +209,113 @@ output_filename = "README-SUMMARY.md"
 obsidian_vault_path = "/Users/username/Documents/ObsidianVault"
 ```
 
-首次运行时会交互式提示输入源目录并自动创建配置文件。你可以手动编辑此文件来修改默认值。
+On first run, the tool will interactively prompt for the source directory and automatically create the configuration file. You can manually edit this file to modify default values.
 
-## 工作原理
+## How It Works
 
-1. **交互式配置**: 首次运行时提示输入源目录并保存
-2. **扫描目录**: 遍历源目录下的一层子目录
-3. **查找 README**: 在每个子目录中查找指定的 README 文件
-4. **解析内容**: 使用规则提取项目信息：
-   - **项目名称**: 提取第一个 `#` 标题，否则使用目录名
-   - **项目功能**: 查找 "Features"、"功能"、"Description" 等关键词段落
-   - **解决的问题**: 查找 "Problem"、"问题"、"Why"、"Motivation" 等关键词段落
-5. **生成表格**: 将所有项目信息汇总到单个 Markdown 表格文件
+1. **Interactive Configuration**: Prompts for source directory on first run and saves it
+2. **Directory Scanning**: Traverses one level of subdirectories in the source directory
+3. **README Discovery**: Finds specified README files in each subdirectory
+4. **Content Parsing**: Uses rules to extract project information:
+   - **Project Name**: Extracts first `#` heading, otherwise uses directory name
+   - **Features**: Looks for "Features", "功能", "Description" keyword sections
+   - **Problems Solved**: Looks for "Problem", "问题", "Why", "Motivation" keyword sections
+5. **Table Generation**: Creates a single Markdown file with all project summaries in a table format
+6. **Output**: Saves to source directory (default) or specified path
 
-## 输出示例
+## Example Output
 
-运行命令后的输出：
+Running the tool:
 
-```
-📁 扫描目录: /Users/qwerdey/projects
-📝 README 文件名: README.md
-� 输出文件: /Users/qwerdey/projects/README-SUMMARY.md
+```bash
+$ readme-sum --source ~/projects
 
-✓ 处理: my-web-app
-✓ 处理: rust-cli-tool
-✓ 处理: python-script
+📁 Scanning directory: /Users/username/projects
+📝 README filename: README.md
+📄 Output file: /Users/username/projects/README-SUMMARY.md
+
+✓ Processed: my-web-app
+✓ Processed: rust-cli-tool
+✓ Processed: python-script
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ 完成! 成功处理 3 个项目
-📄 摘要文件已生成: /Users/qwerdey/projects/README-SUMMARY.md
+✅ Complete! Successfully processed 3 projects
+📄 Summary file generated: /Users/username/projects/README-SUMMARY.md
 ```
 
-生成的摘要文件格式：
+Generated summary file format:
 
 ```markdown
-# README 项目汇总
+# README Project Summary
 
-生成时间: 2026-03-19 17:30:00
+Generated: 2026-03-19 17:30:00
 
-| 项目名称 | 项目目录 | 项目功能 | 解决的问题 | 源文件路径 |
-|---------|---------|---------|-----------|----------|
+| Project Name | Project Directory | Features | Problems Solved | Source File Path |
+|--------------|-------------------|----------|-----------------|------------------|
 | my-web-app | [📁](/path/to/my-web-app/) | Real-time analytics<br>Beautiful charts<br>... | Expensive tools<br>Complex setup<br>... | projects/my-web-app/README.md |
 | rust-cli-tool | [📁](/path/to/rust-cli-tool/) | Fast execution<br>Cross-platform<br>... | Manual processes<br>Slow scripts<br>... | projects/rust-cli-tool/README.md |
 
 ---
-*此摘要由 README Summarizer 自动生成*
+*This summary was automatically generated by README Summarizer*
 ```
 
-**项目目录列**包含可点击的文件夹图标链接，点击可直接在文件管理器中打开项目目录。
+**Project Directory column** contains clickable folder icon links that open the project directory directly in your file manager.
 
-## 技术栈
+## Tech Stack
 
 - **Rust 2021 Edition**
-- **clap**: 命令行参数解析
-- **serde + toml**: 配置序列化
-- **regex**: 文本模式匹配
-- **chrono**: 时间戳生成
-- **walkdir**: 目录遍历
+- **clap**: Command-line argument parsing
+- **serde + toml**: Configuration serialization
+- **regex**: Text pattern matching
+- **chrono**: Timestamp generation
+- **walkdir**: Directory traversal
+- **notify**: File system watching
+- **dirs**: Cross-platform directory paths
 
-## 项目结构
+## Project Structure
 
 ```
-git-readmes/
-├── Cargo.toml
+readme-summarizer/
 ├── src/
-│   ├── main.rs           # 程序入口和 CLI 参数解析
-│   ├── config.rs         # 配置管理
-│   ├── scanner.rs        # 目录扫描
-│   ├── parser.rs         # README 内容解析
-│   ├── generator.rs      # 摘要文件生成
-│   └── error.rs          # 错误类型定义
-└── README.md
+│   ├── main.rs          # Entry point and CLI handling
+│   ├── config.rs        # Configuration management
+│   ├── scanner.rs       # Directory scanning
+│   ├── parser.rs        # README parsing
+│   ├── generator.rs     # Summary generation
+│   └── error.rs         # Error handling
+├── Cargo.toml           # Dependencies and metadata
+├── README.md            # This file
+├── README.zh-CN.md      # Chinese documentation
+├── LICENSE              # MIT License
+└── CHANGELOG.md         # Version history
 ```
 
-## 注意事项
+## Notes
 
-- 工具仅扫描一层子目录，不会递归扫描
-- 解析规则基于常见 README 结构，可能无法覆盖所有格式
-- 默认输出文件位于源目录内，文件名为 `README-SUMMARY.md`
-- 已存在的摘要文件会被覆盖
-- 表格中的长文本使用 `<br>` 分隔多行内容
-- 监控模式会忽略输出文件本身的变化，避免无限循环
-- Obsidian 同步会覆盖 vault 中的同名文件
+- The tool scans only one level of subdirectories, not recursively
+- Parsing rules are based on common README structures and may not cover all formats
+- Default output file is located in the source directory with filename `README-SUMMARY.md`
+- Existing summary files will be overwritten
+- Long text in tables uses `<br>` to separate multiple lines
+- Watch mode ignores changes to the output file itself to avoid infinite loops
+- Obsidian sync will overwrite files with the same name in the vault
 
-## 许可证
+## Contributing
 
-MIT License
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+## Documentation
+
+- [Quick Start Guide](QUICKSTART.md) - Get started in 5 minutes
+- [Publishing Guide](HOW_TO_PUBLISH.md) - Complete guide to publishing
+- [Release Guide](RELEASE.md) - Detailed release process
+- [Homebrew Setup](HOMEBREW_SETUP.md) - Homebrew installation setup
+- [Usage Examples](USAGE_EXAMPLES.md) - More usage examples

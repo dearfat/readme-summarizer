@@ -23,3 +23,14 @@ test-summaries/
 *.dll
 *.so
 *.dylib
+
+# Internal development documentation (not for end users)
+HOW_TO_PUBLISH.md
+PUBLISH_CHECKLIST.md
+QUICKSTART.md
+RELEASE.md
+HOMEBREW_SETUP.md
+test_*.sh
+scripts/
+homebrew/
+.dev/
