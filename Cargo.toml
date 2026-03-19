@@ -1,0 +1,35 @@
+[package]
+name = "readme-summarizer"
+version = "1.0.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "A CLI tool to scan directories and generate summaries of README files in a single Markdown table"
+license = "MIT"
+repository = "https://github.com/YOUR_USERNAME/readme-summarizer"
+homepage = "https://github.com/YOUR_USERNAME/readme-summarizer"
+documentation = "https://github.com/YOUR_USERNAME/readme-summarizer#readme"
+readme = "README.md"
+keywords = ["cli", "readme", "documentation", "markdown", "summarizer"]
+categories = ["command-line-utilities", "development-tools"]
+exclude = [
+    "test-projects/*",
+    ".github/*",
+    "*.sh",
+]
+
+[[bin]]
+name = "readme-sum"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+anyhow = "1.0"
+thiserror = "1.0"
+dirs = "5.0"
+walkdir = "2.5"
+regex = "1.10"
+chrono = "0.4"
+notify = "6.1"
+notify-debouncer-mini = "0.4"

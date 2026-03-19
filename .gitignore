@@ -1,0 +1,25 @@
+# Rust
+/target/
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+.kiro/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+test-projects/
+test-summaries/
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
